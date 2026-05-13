@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phishing Detector</title>
+    <!-- ✅ External CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<h1>Phishing Detection</h1>
+
+<form action="/predict" method="post">
+    <!-- ✅ Correct 11 inputs -->
+    <input name="mld_res" placeholder="mld_res"><br>
+    <input name="mld_ps_res" placeholder="mld_ps_res"><br>
+    <input name="card_rem" placeholder="card_rem"><br>
+
+    <input name="ratio_Rrem" placeholder="ratio_Rrem"><br>
+    <input name="ratio_Arem" placeholder="ratio_Arem"><br>
+
+    <input name="jaccard_RR" placeholder="jaccard_RR"><br>
+    <input name="jaccard_RA" placeholder="jaccard_RA"><br>
+    <input name="jaccard_AR" placeholder="jaccard_AR"><br>
+    <input name="jaccard_AA" placeholder="jaccard_AA"><br>
+    <input name="jaccard_ARrd" placeholder="jaccard_ARrd"><br>
+    <input name="jaccard_ARrem" placeholder="jaccard_ARrem"><br>
+
+    <br>
+    <button type="submit">Predict</button>
+</form>
+
+<h2>{{ prediction_text }}</h2>
+
+<!-- ✅ External JS -->
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+<!-- ✅ Example: load JSON -->
+<script>
+    fetch("{{ url_for('static', filename='history.json') }}")
+      .then(response => response.json())
+      .then(data => {
+          console.log("History JSON loaded:", data);
+      });
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phishing Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <div id="history-section">
+
+    
+    
+        
+<nav class="navbar">
+    
+    <a href="{{ url_for('logout') }}">Logout</a>
+    <a href="{{ url_for('home') }}">Home</a>
+
+</nav>
+            <button>
+                 <a href="#history-section">Past Predictions</a>
+            </button>
+        
+        </nav>
+        </div>
+</head>
+<body>
+
+
+<!-- ✅ Navbar -->
+
+
+<!-- ✅ Prediction Form -->
+<div class="form-container">
+    
+    <div class="marquee-box">
+  <h2>⚠️ Phishing Email Detector</h2>
+
+  
+</div>
+
+
+
+    <form action="{{ url_for('predict') }}" method="post">
+        <!-- ✅ Correct 11 inputs -->
+        <div class="input-group"><input name="mld_res" required><label>mld_res</label></div>
+        <div class="input-group"><input name="mld_ps_res" required><label>mld_ps_res</label></div>
+        <div class="input-group"><input name="card_rem" required><label>card_rem</label></div>
+
+        <div class="input-group"><input name="ratio_Rrem" required><label>ratio_Rrem</label></div>
+        <div class="input-group"><input name="ratio_Arem" required><label>ratio_Arem</label></div>
+
+        <div class="input-group"><input name="jaccard_RR" required><label>jaccard_RR</label></div>
+        <div class="input-group"><input name="jaccard_RA" required><label>jaccard_RA</label></div>
+        <div class="input-group"><input name="jaccard_AR" required><label>jaccard_AR</label></div>
+        <div class="input-group"><input name="jaccard_AA" required><label>jaccard_AA</label></div>
+        <div class="input-group"><input name="jaccard_ARrd" required><label>jaccard_ARrd</label></div>
+        <div class="input-group"><input name="jaccard_ARrem" required><label>jaccard_ARrem</label></div>
+
+        <button type="submit">Predict</button>
+        
+
+         
+
+    </form>
+    
+    
+    
+
+
+    <!-- ✅ Prediction Result -->
+    {% if prediction_text %}
+    <div class="alert">
+        {{ prediction_text }}
+    </div>
+    {% endif %}
+</div>
+
+<!-- ✅ History Section -->
+<div id="history-section">
+
+    <h2>📜  History</h2>
+
+    
+    {% if history %}
+        <ul>
+            {% for log in history %}
+                <li>{{ log[0] }} → {{ log[1] }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No past predictions yet.</p>
+    {% endif %}
+</div>
+
+
+</body>
+</html>
